@@ -1,0 +1,78 @@
+<html>
+<head>
+  {% load static %}
+    {% comment %} <link rel="stylesheet" type="text/css" href="/static/postsapp/css/bootstrap.min.css"> {% endcomment %}
+    <link rel="stylesheet" type="text/css" href="{%static  'postsapp/css/bootstrap.min.css'%}">
+    {%if title%}
+    <title>{{title}}</title>
+    {% else %}
+    <title>Django Blog</title>
+{% endif %}
+</head>
+<body> 
+    <nav class="navbar navbar-expand-lg navbar-dark bg-success">
+        <div class="container">
+        <a class="navbar-brand" href="#">PostsApplication</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+      
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav mr-auto py-2">
+            <li class="nav-item active">
+              <a class="nav-link" href="{% url 'homepage'%}">Home <span class="sr-only"></span></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/about">About Us</a>
+            </li>
+        </ul>
+            <ul class="navbar-nav ms-auto ">
+                {% if user.is_authenticated %}
+                <li class="nav-item"> <a class="nav-link" href="{%url 'profile'%}">Profile</a>
+                </li>
+                <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    {{user.username}}
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="{%url 'postcreate'%}">Create Post</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="{%url 'logout'%}">Logout</a>
+
+                </div>
+                </li>
+            {% else %}
+                <li class="nav-item">
+                <a class="nav-link" href="{%url 'login'%}" tabindex="-1" aria-disabled="true">Login</a>
+                </li>
+
+                <li>
+                    <a class="nav-link" href="{%url 'register'%}" tabindex="-1" aria-disabled="true">Register</a>
+                </li>
+                </ul>
+            {% endif %}
+        </div>
+    </div>
+      </nav>
+      <div class="row">
+         <div class="col md-8">
+             {% if messages %}
+             {% for message in messages  %}
+             <div class="alert alert-{{message.tags}}">
+                 {{message}}
+             </div>
+             {% endfor %}
+             {% endif %}
+             <div class="container py-5">
+{%block content%}
+
+{% endblock %}
+</div>
+         </div>
+        </div>
+
+</body>
+<script src="{%static 'postsapp/js/bootstrap.min.js'%}"></script>
+
+{% comment %} <script src="/static/postsapp/js/bootstrap.min.js"></script> {% endcomment %}
+</html>

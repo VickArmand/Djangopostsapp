@@ -1,0 +1,50 @@
+{% extends 'postsapp/base.html' %}
+{% block content %}
+<div class="container">
+<h1 class="mb-3">Posts By {{view.kwargs.username}} ({{page_obj.paginator.count}}) </h1> 
+{% comment %} {% if(count(posts)) %} {% endcomment %}
+{%for post in posts%}
+<div class="card">
+    <div class="card-header">
+        <img src="{{post.author.profile.image.url}}" class="rounded-circle article-img" alt="">
+        <h4><a href="{%url 'userposts' post.author.username%}">{{post.author}}</a> </h4>
+  
+    <h3> <a class="article-title" href="{%url 'postdetails' post.id%}">{{post.title}}</a></h3>
+    </div>
+    <div class="card-body">
+        <p>{{post.content}}</p>
+
+<p>Posted on {{post.date_posted| date:"F-d, Y"}}</p>
+
+
+</div>
+</div>
+<article>
+{%endfor%}
+{%if is_paginated%}
+{% if page_obj.has_previous  %}
+<a class="btn btn-outline-info mb-4" href="?page=1">First</a>
+<a class="btn btn-outline-info mb-4" href="?page={{page_obj.previous_page_number}}">Previous</a>
+
+{% endif %}
+
+{% for num in page_obj.paginator.page_range %}
+{% if page_obj.number == num %}
+<a class="btn btn-outline-info mb-4" href="?page={{num}}">{{num}}</a>
+{% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+<a class="btn btn-info mb-4" href="?page={{num}}">{{num}}</a>
+
+{% endif %}
+
+{% endfor %}
+{% if page_obj.has_next  %} 
+<a class="btn btn-outline-info mb-4" href="?page={{page_obj.next_page_number}}">Next</a>
+<a class="btn btn-outline-info mb-4" href="?page={{page_obj.paginator.num_pages}}">Previous</a>
+
+{% endif %}
+{% endif %}
+{% comment %} {% else %}
+<div class="alert alert-warning">No posts found</div> 
+{% endif %} {% endcomment %}
+</div>
+{% endblock %}
